@@ -65,4 +65,43 @@ router.get(
     }
 );
 
+router.patch(
+    "/applications/:id/status",
+    authMiddleware,
+    requireRole("poster"),
+    async (req: Request, res: Response) => {
+        try {
+            const applicationId = req.params.id;
+            const { status } = req.body;
+
+            const validStatuses = new Set([
+                "applied",
+                "reviewing",
+                "accepted",
+                "rejected",
+            ]);
+
+            if (!validStatuses.has(status)) {
+                return res.status(400).json({ message: "Invalid status" });
+            }
+
+            const application = await Application.findByIdAndUpdate(
+                applicationId,
+                { status },
+                { new: true }
+            );
+
+            if (!application) {
+                return res
+                    .status(404)
+                    .json({ message: "Application not found" });
+            }
+
+            res.json(application);
+        } catch (error) {
+            res.status(500).json({ message: "Error updating status" });
+        }
+    }
+);
+
 export default router;
