@@ -37,6 +37,7 @@ router.get("/", async (req: Request, res: Response) => {
     }
 });
 
+//creating job
 router.post(
     "/",
     authMiddleware,
@@ -54,6 +55,7 @@ router.post(
             res.status(201).json(job);
         } catch (error) {
             console.log("error creating job post ", error);
+            res.status(500).json({ message: "Error creating job post" });
         }
     }
 );

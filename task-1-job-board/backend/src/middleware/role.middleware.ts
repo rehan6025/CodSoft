@@ -6,5 +6,6 @@ export const requireRole = (role: String) => {
         if (req.user.role !== role) {
             return res.status(403).json({ message: "Access is denied" });
         }
+        next();
     };
 };

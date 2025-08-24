@@ -16,15 +16,18 @@ export const authMiddleware = async (
         if (!process.env.JWT_SECRET) {
             return res.json({ message: "Can't verify token" });
         }
-        const decoded = jwt.verify("token", process.env.JWT_SECRET);
-
-        const user = await User.findById(decoded);
+        const decoded = jwt.verify(token, process.env.JWT_SECRET) as {
+            userId: string;
+        };
+        const userId = decoded.userId;
+        const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({ message: "No user found" });
         }
 
         //@ts-ignore
         req.user = user;
+
         next();
     } catch (error) {
         console.log("Error in middleware:: ", error);
