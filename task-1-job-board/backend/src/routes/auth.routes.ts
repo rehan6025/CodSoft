@@ -41,6 +41,7 @@ router.post("/register", async (req: Request, res: Response) => {
 
         res.status(200).json({
             token,
+            user,
         });
     } catch (error) {
         console.log("Error registoring user :", error);
@@ -88,6 +89,7 @@ router.post("/login", async (req: Request, res: Response) => {
 
         res.status(200).json({
             token,
+            user,
         });
     } catch (error) {
         console.log("Error signing in: ", error);

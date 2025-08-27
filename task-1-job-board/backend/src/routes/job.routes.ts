@@ -8,6 +8,7 @@ import Application from "../models/application.model";
 
 const router = express.Router();
 
+//everyone ,  get all jobs
 router.get("/", async (req: Request, res: Response) => {
     try {
         const { type, location, search } = req.query;
@@ -37,7 +38,7 @@ router.get("/", async (req: Request, res: Response) => {
     }
 });
 
-//creating job
+//poster - creating job
 router.post(
     "/",
     authMiddleware,
@@ -60,6 +61,40 @@ router.post(
     }
 );
 
+//poster - deleting job
+router.delete(
+    "/:id",
+    authMiddleware,
+    requireRole("poster"),
+    async (req: Request, res: Response) => {
+        const id = req.params.id;
+
+        try {
+            const job = await Job.findByIdAndDelete(id);
+            res.status(201).json("Deleted Successfully");
+        } catch (error) {
+            console.log("Error deleting job::", error);
+            res.status(500).json({ messsage: error });
+        }
+    }
+);
+
+//poster - getting all the jobs they posted
+router.get(
+    "/myJobs",
+    authMiddleware,
+    requireRole("poster"),
+    async (req: Request, res: Response) => {
+        const jobs = await Job.find({
+            //@ts-ignore
+            postedBy: req.user._id,
+        });
+
+        res.status(200).json(jobs);
+    }
+);
+
+//seeker + poster , viewing a specific job
 router.get("/:id", async (req: Request, res: Response) => {
     const id = req.params.id;
     try {
@@ -71,7 +106,7 @@ router.get("/:id", async (req: Request, res: Response) => {
     }
 });
 
-//applying for job here
+//seeker - applying for job here
 router.post(
     "/:id/apply",
     authMiddleware,

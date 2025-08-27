@@ -7,6 +7,7 @@ import Job from "../models/job.model";
 
 const router = express.Router();
 
+//seeker + poster - checking our profile
 router.get("/", authMiddleware, (req: Request, res: Response) => {
     try {
         //@ts-ignore
@@ -16,7 +17,7 @@ router.get("/", authMiddleware, (req: Request, res: Response) => {
     }
 });
 
-//seeing job applicants
+//poster - seeing job applicants
 router.get(
     "/jobs/:id/applications",
     authMiddleware,
@@ -42,6 +43,7 @@ router.get(
     }
 );
 
+//seeker - seeing all applications , that is, where i have applied
 router.get(
     "/applications",
     authMiddleware,
@@ -65,6 +67,7 @@ router.get(
     }
 );
 
+//poster - changing status of a application
 router.patch(
     "/applications/:id/status",
     authMiddleware,
