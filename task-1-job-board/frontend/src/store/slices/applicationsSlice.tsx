@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { data } from "react-router-dom";
 
 type Applications = {
     id: string;
@@ -92,6 +91,34 @@ const applicationSlice = createSlice({
                 state.isLoading = true;
                 state.error = null;
             })
-            .addCase(applyToJobs.fulfilled, (state, action) => {});
+            .addCase(applyToJobs.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.userApplications.push(action.payload);
+            })
+            .addCase(applyToJobs.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.error.message || "Error applying to job";
+            });
+
+        builder
+            .addCase(getUserApplications.fulfilled, (state, action) => {
+                state.userApplications = action.payload;
+            })
+
+            .addCase(getJobApplications.fulfilled, (state, action) => {
+                state.jobApplications = action.payload;
+            })
+
+            .addCase(updateApplicationStatus.fulfilled, (state, action) => {
+                const index = state.jobApplications.findIndex(
+                    (app) => app.id === action.payload.id
+                );
+                if (index !== -1) {
+                    state.jobApplications[index] = action.payload;
+                }
+            });
     },
 });
+
+export const { clearError } = applicationSlice.actions;
+export default applicationSlice.reducer;

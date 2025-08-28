@@ -1,12 +1,26 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const initialState = {
+interface AuthState {
+    user: User | null;
+    token: string | null;
+    isLoading: boolean;
+    error: string | null;
+}
+
+const initialState: AuthState = {
     user: null,
     token: localStorage.getItem("token"),
     isLoading: false,
     error: null as string | null,
 };
+
+export interface User {
+    id: string;
+    username: string;
+    email: string;
+    role: "poster" | "seeker";
+}
 
 export const register = createAsyncThunk(
     "auth/register",
