@@ -1,8 +1,9 @@
 import { Provider } from "react-redux";
 import "./App.css";
 import { store } from "./store";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
 function AppContent() {
     return (
