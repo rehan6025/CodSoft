@@ -4,12 +4,16 @@ import { store } from "./store";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import ProtectedRoute from "./components/common/ProtectedRoute";
+import LoginForm from "./components/auth/LoginForm";
+import RegisterFrom from "./components/auth/RegisterFrom";
+import HomePage from "./pages/HomePage";
+import JobsPage from "./pages/JobsPage";
 
 function AppContent() {
     return (
         <Routes>
             <Route path="/login" element={<LoginForm />} />
-            <Route path="/register" element={<RegisterForm />} />
+            <Route path="/register" element={<RegisterFrom />} />
             <Route
                 path="/*"
                 element={

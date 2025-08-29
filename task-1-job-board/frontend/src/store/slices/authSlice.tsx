@@ -25,7 +25,7 @@ export interface User {
 export const register = createAsyncThunk(
     "auth/register",
     async (data: {
-        name: string;
+        username: string;
         email: string;
         password: string;
         role: "poster" | "seeker";
