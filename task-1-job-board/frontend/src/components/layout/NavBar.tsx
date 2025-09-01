@@ -2,11 +2,13 @@ import { Briefcase, FileText, LogOut, Plus, User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { logout } from "../../store/slices/authSlice";
+import { useState } from "react";
 
 const NavBar = () => {
     const { user } = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const [menuOpen, setMenuOpen] = useState(false);
 
     const handleLogout = () => {
         dispatch(logout());
@@ -14,7 +16,7 @@ const NavBar = () => {
     };
 
     return (
-        <div className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
+        <div className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 ">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
                     <Link to="/" className="flex items-center space-x-2">
@@ -38,7 +40,7 @@ const NavBar = () => {
                                     <>
                                         <Link
                                             to="/create-job"
-                                            className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors duration-200"
+                                            className="hidden md:flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors duration-200"
                                         >
                                             <Plus className="w-4 h-4" />
                                             <span>Post Job</span>
@@ -46,7 +48,7 @@ const NavBar = () => {
 
                                         <Link
                                             to="my-jobs"
-                                            className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors duration-200"
+                                            className="sm:hidden flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors duration-200"
                                         >
                                             <Briefcase className="w-4 h-4" />
                                             <span>My Jobs</span>
@@ -55,14 +57,14 @@ const NavBar = () => {
                                 ) : (
                                     <Link
                                         to="/my-applications"
-                                        className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors duration-200"
+                                        className="hidden md:flex  items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors duration-200"
                                     >
                                         <FileText className="h-4 w-4" />
                                         <span>Applications</span>
                                     </Link>
                                 )}
 
-                                <div className="flex items-center space-x-4">
+                                <div className="hidden md:flex items-center space-x-4 ">
                                     <Link
                                         to="/profile"
                                         className="flex items-center space-x-1 text-gray-700 hover:text-blue-600 transition-colors duration-200"

@@ -51,10 +51,19 @@ export const login = createAsyncThunk(
     }
 );
 
-export const getProfile = createAsyncThunk("auth/getProfile", async () => {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/me`);
-    return response.data;
-});
+export const getProfile = createAsyncThunk(
+    "auth/getProfile",
+    async (_, { getState }) => {
+        const state = getState() as { auth: AuthState };
+        const token = state.auth.token || localStorage.getItem("token");
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/me`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    }
+);
 
 const authSlice = createSlice({
     name: "auth",

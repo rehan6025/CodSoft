@@ -13,11 +13,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 }) => {
     const { user, token } = useAppSelector((state) => state.auth);
     if (!token || !user) {
-        <Navigate to="/login" replace />;
+        return <Navigate to="/login" />;
     }
 
     if (requiredRole && user?.role !== requiredRole) {
-        <Navigate to="/jobs" replace />;
+        return <Navigate to="/jobs" replace />;
     }
 
     return <>{children}</>;

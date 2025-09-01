@@ -2,7 +2,17 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { Link, useNavigate } from "react-router-dom";
 import { clearError, register } from "../../store/slices/authSlice";
-import { Eye, EyeOff, Lock, LogIn, Mail, User, UserSearch } from "lucide-react";
+import {
+    Briefcase,
+    Eye,
+    EyeOff,
+    Lock,
+    LogIn,
+    Mail,
+    Search,
+    User,
+    UserSearch,
+} from "lucide-react";
 
 type FormData = {
     username: string;
@@ -70,7 +80,7 @@ const RegisterFrom = () => {
                         </p>
                     </div>
 
-                    <form className="space-y-6  p-8">
+                    <form className="space-y-6  p-8" onSubmit={handleSubmit}>
                         {error && (
                             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
                                 {error}
@@ -92,7 +102,7 @@ const RegisterFrom = () => {
                                             : "border-gray-300 hover:border-gray-400"
                                     }`}
                                 >
-                                    <UserSearch className="h-5 w-5 mr-2" />
+                                    <Search className="h-5 w-5 mr-2" />
                                     Seeker
                                     <input
                                         type="radio"
@@ -116,6 +126,7 @@ const RegisterFrom = () => {
                                             : "border-gray-300 hover:border-gray-400"
                                     }`}
                                 >
+                                    <Briefcase className="w-5 h-5 mr-2" />
                                     Employer
                                     <input
                                         type="radio"
