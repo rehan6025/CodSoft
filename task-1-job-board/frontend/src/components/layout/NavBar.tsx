@@ -2,13 +2,11 @@ import { Briefcase, FileText, LogOut, Plus, User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { logout } from "../../store/slices/authSlice";
-import { useState } from "react";
 
 const NavBar = () => {
     const { user } = useAppSelector((state) => state.auth);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const [menuOpen, setMenuOpen] = useState(false);
 
     const handleLogout = () => {
         dispatch(logout());
