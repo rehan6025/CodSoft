@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export type Job = {
-    id: string;
+    _id: string;
     title: string;
     location: string;
     description: string;
@@ -122,12 +122,12 @@ const jobsSlice = createSlice({
             // Delete Job
             .addCase(deleteJob.fulfilled, (state, action) => {
                 const deletedId = action.payload;
-                state.jobs = state.jobs.filter((job) => job.id !== deletedId);
+                state.jobs = state.jobs.filter((job) => job._id !== deletedId);
                 state.userJobs = state.userJobs.filter(
-                    (job) => job.id !== deletedId
+                    (job) => job._id !== deletedId
                 );
 
-                if (state.currentJob?.id === deletedId) {
+                if (state.currentJob?._id === deletedId) {
                     state.currentJob = null;
                 }
             })

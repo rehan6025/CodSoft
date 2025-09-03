@@ -8,6 +8,7 @@ import LoginForm from "./components/auth/LoginForm";
 import RegisterFrom from "./components/auth/RegisterFrom";
 import HomePage from "./pages/HomePage";
 import JobsPage from "./pages/JobsPage";
+import SingleJob from "./pages/SingleJob";
 
 function AppContent() {
     return (
@@ -25,6 +26,14 @@ function AppContent() {
                                 element={
                                     <ProtectedRoute>
                                         <JobsPage />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route
+                                path="/jobs/:jobid"
+                                element={
+                                    <ProtectedRoute>
+                                        <SingleJob />
                                     </ProtectedRoute>
                                 }
                             />
