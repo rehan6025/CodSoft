@@ -28,9 +28,15 @@ const initialState: ApplicationsState = {
 export const applyToJobs = createAsyncThunk(
     "/applications/applyToJob",
     async ({ jobId, data }: { jobId: string; data: { resumeUrl: string } }) => {
+        const token = localStorage.getItem("token");
         const res = await axios.post(
             `${import.meta.env.VITE_API_URL}/jobs/${jobId}/apply`,
-            { data }
+            data,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
         );
 
         return res.data;
@@ -40,8 +46,14 @@ export const applyToJobs = createAsyncThunk(
 export const getUserApplications = createAsyncThunk(
     "/applications/getUserApplications",
     async () => {
-        const res = await axios.post(
-            `${import.meta.env.VITE_API_URL}/me/applications`
+        const token = localStorage.getItem("token");
+        const res = await axios.get(
+            `${import.meta.env.VITE_API_URL}/me/applications`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
         );
 
         return res.data;
@@ -51,8 +63,14 @@ export const getUserApplications = createAsyncThunk(
 export const getJobApplications = createAsyncThunk(
     "/applications/getJobApplications",
     async (jobId: string) => {
-        const res = await axios.post(
-            `${import.meta.env.VITE_API_URL}/jobs/${jobId}/applications`
+        const token = localStorage.getItem("token");
+        const res = await axios.get(
+            `${import.meta.env.VITE_API_URL}/me/${jobId}/applications`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
         );
         return res.data;
     }
@@ -67,11 +85,17 @@ export const updateApplicationStatus = createAsyncThunk(
         applicationId: string;
         status: string;
     }) => {
+        const token = localStorage.getItem("token");
         const res = await axios.patch(
             `${
                 import.meta.env.VITE_API_URL
             }/applications/${applicationId}/status`,
-            { data: status }
+            { status },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
         );
         return res.data;
     }

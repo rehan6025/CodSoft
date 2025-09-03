@@ -19,7 +19,7 @@ router.get("/", authMiddleware, (req: Request, res: Response) => {
 
 //poster - seeing job applicants
 router.get(
-    "/jobs/:id/applications",
+    "/:id/applications",
     authMiddleware,
     requireRole("poster"),
     async (req: Request, res: Response) => {

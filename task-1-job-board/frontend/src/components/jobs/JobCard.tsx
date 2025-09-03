@@ -3,22 +3,22 @@ import type { Job } from "../../store/slices/jobsSlice";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 
-const JobCard = ({ job }: { job: Job }) => {
-    const getJobTypeColor = (type: string) => {
-        switch (type) {
-            case "full-time":
-                return "bg-green-100 text-green-800";
-            case "part-time":
-                return "bg-blue-100 text-blue-800";
-            case "freelance":
-                return "bg-purple-100 text-purple-800";
-            case "internship":
-                return "bg-yellow-100 text-yellow-800";
-            default:
-                return "bg-gray-100 text-gray-800";
-        }
-    };
+export const getJobTypeColor = (type: string) => {
+    switch (type) {
+        case "full-time":
+            return "bg-green-100 text-green-800";
+        case "part-time":
+            return "bg-blue-100 text-blue-800";
+        case "freelance":
+            return "bg-purple-100 text-purple-800";
+        case "internship":
+            return "bg-yellow-100 text-yellow-800";
+        default:
+            return "bg-gray-100 text-gray-800";
+    }
+};
 
+const JobCard = ({ job }: { job: Job }) => {
     return (
         <div className="bg-white/70 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300  p-6 flex flex-col">
             <div className="flex justify-between items-start mb-4">
