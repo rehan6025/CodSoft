@@ -11,7 +11,10 @@ export type Job = {
         website?: string;
     };
     employmentType: "full-time" | "part-time" | "internship" | "freelance";
-    postedBy: string;
+    postedBy: {
+        username: string;
+        email: string;
+    };
     createdAt?: string;
     updatedAt?: string;
 };

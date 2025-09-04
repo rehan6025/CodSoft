@@ -27,19 +27,24 @@ const SingleJob = () => {
         dispatch(getUserApplications());
     }, [dispatch]);
     useEffect(() => {
-        console.log(userApplications, jobid);
         if (userApplications.some((app) => app.job === jobid)) {
             setApplyStatus("You have already applied for this job.");
         }
     }, [userApplications, jobid]);
 
     const handleApply = async () => {
+        if (!resumeUrl) return;
         try {
-            if (!resumeUrl) return;
-            await dispatch(applyToJobs({ jobId: jobid, data: { resumeUrl } }));
+            await dispatch(
+                applyToJobs({ jobId: jobid, data: { resumeUrl } })
+            ).unwrap();
             setApplyStatus("Application submitted!");
         } catch (err: any) {
-            if (err?.message?.includes("Already applied for this job")) {
+            if (
+                err?.response?.data?.message ===
+                    "Already applied for this job" ||
+                err?.message?.includes("status code 403")
+            ) {
                 setApplyStatus("You have already applied for this job.");
             } else {
                 setApplyStatus("Failed to apply. Try again.");
@@ -57,7 +62,6 @@ const SingleJob = () => {
         return <LoadingSpinner size="lg" />;
     }
 
-    console.log(currentJob);
     if (!currentJob) {
         return (
             <div className="flex justify-center items-center h-64">
@@ -67,7 +71,7 @@ const SingleJob = () => {
     }
 
     return (
-        <div className="max-w-3xl mx-auto bg-white/80 rounded-xl shadow-lg p-8 mt-8">
+        <div className="max-w-3xl mx-auto bg-white/80 rounded-xl shadow-lg p-8 mt-8 ">
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-bold text-gray-900 mb-2">
                     {currentJob.title}
@@ -123,6 +127,13 @@ const SingleJob = () => {
                         : "N/A"}
                 </span>
             </div>
+            <div className="mt-4 text-gray-700">
+                By {currentJob.postedBy.username}
+            </div>
+            <div className="text-gray-700">
+                Contact - {currentJob.postedBy.email}
+            </div>
+
             {currentJob.company.website && (
                 <div className="mt-4">
                     <a

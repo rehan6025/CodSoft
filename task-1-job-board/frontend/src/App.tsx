@@ -9,6 +9,8 @@ import RegisterFrom from "./components/auth/RegisterFrom";
 import HomePage from "./pages/HomePage";
 import JobsPage from "./pages/JobsPage";
 import SingleJob from "./pages/SingleJob";
+import ProfilePage from "./pages/ProfilePage";
+import PostJobPage from "./pages/PostJobPage";
 
 function AppContent() {
     return (
@@ -29,6 +31,16 @@ function AppContent() {
                                     </ProtectedRoute>
                                 }
                             />
+
+                            <Route
+                                path="/profile"
+                                element={
+                                    <ProtectedRoute>
+                                        <ProfilePage />
+                                    </ProtectedRoute>
+                                }
+                            />
+
                             <Route
                                 path="/jobs/:jobid"
                                 element={
@@ -37,6 +49,16 @@ function AppContent() {
                                     </ProtectedRoute>
                                 }
                             />
+
+                            <Route
+                                path="/create-job"
+                                element={
+                                    <ProtectedRoute requiredRole="poster">
+                                        <PostJobPage />
+                                    </ProtectedRoute>
+                                }
+                            />
+
                             <Route
                                 path="*"
                                 element={<Navigate to="/" replace />}

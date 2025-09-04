@@ -1,26 +1,45 @@
 import type React from "react";
-import { useAppSelector } from "../../hooks/redux";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { Navigate } from "react-router-dom";
+import LoadingSpinner from "./LoadingSpinner";
+import { getProfile } from "../../store/slices/authSlice";
 
 interface ProtectedRouteProps {
-    children: React.ReactNode;
-    requiredRole?: "poster" | "seeker";
+  children: React.ReactNode;
+  requiredRole?: "poster" | "seeker";
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
-    children,
-    requiredRole,
+  children,
+  requiredRole,
 }) => {
-    const { user, token } = useAppSelector((state) => state.auth);
-    if (!token || !user) {
-        return <Navigate to="/login" />;
-    }
+  const dispatch = useAppDispatch();
+  const { user, token, isLoading } = useAppSelector((state) => state.auth);
 
-    if (requiredRole && user?.role !== requiredRole) {
-        return <Navigate to="/jobs" replace />;
+  useEffect(() => {
+    if (token && !user && !isLoading) {
+      dispatch(getProfile());
     }
+  }, [dispatch, token, user, isLoading]);
 
-    return <>{children}</>;
+  if (token && isLoading && !user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
+
+  if (!token || (!user && !isLoading)) {
+    return <Navigate to="/login" />;
+  }
+
+  if (requiredRole && user?.role !== requiredRole) {
+    return <Navigate to="/jobs" replace />;
+  }
+
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;

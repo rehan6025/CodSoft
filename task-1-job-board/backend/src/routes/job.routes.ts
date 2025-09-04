@@ -28,7 +28,7 @@ router.get("/", async (req: Request, res: Response) => {
         }
 
         const jobs = await Job.find(filter)
-            .populate("postedBy", "name email")
+            .populate("postedBy", "username email")
             .sort({ createdAt: -1 });
 
         res.json(jobs);
@@ -98,7 +98,10 @@ router.get(
 router.get("/:id", async (req: Request, res: Response) => {
     const id = req.params.id;
     try {
-        const job = await Job.findById(id);
+        const job = await Job.findById(id).populate(
+            "postedBy",
+            "username email"
+        );
         res.status(200).json(job);
     } catch (error) {
         console.log("Error getting job ::", error);
@@ -128,7 +131,7 @@ router.post(
             });
             if (existingApp) {
                 return res
-                    .status(400)
+                    .status(403)
                     .json({ message: "Already applied for this job" });
             }
 

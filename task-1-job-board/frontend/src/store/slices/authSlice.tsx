@@ -107,8 +107,18 @@ const authSlice = createSlice({
                 state.error = action.error.message || "Login failed";
             })
 
+            .addCase(getProfile.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
             .addCase(getProfile.fulfilled, (state, action) => {
+                state.isLoading = false;
                 state.user = action.payload;
+            })
+            .addCase(getProfile.rejected, (state, action) => {
+                state.isLoading = false;
+                state.user = null;
+                state.error = action.error.message || "Failed to load profile";
             });
     },
 });
