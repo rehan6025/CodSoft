@@ -19,6 +19,18 @@ export type Job = {
     updatedAt?: string;
 };
 
+type createJobType = {
+    title: string;
+    location: string;
+    description: string;
+    company: {
+        name: string;
+        website: string;
+    };
+    employmentType: "full-time" | "part-time" | "freelance" | "internship";
+    postedBy: string;
+};
+
 interface JobsState {
     jobs: Job[];
     currentJob: Job | null;
@@ -60,10 +72,16 @@ export const getJobById = createAsyncThunk(
 // Create Job
 export const createJob = createAsyncThunk(
     "jobs/createJob",
-    async (data: Omit<Job, "id" | "createdAt" | "updatedAt">) => {
+    async (data: createJobType) => {
+        const token = localStorage.getItem("token");
         const res = await axios.post(
             `${import.meta.env.VITE_API_URL}/jobs`,
-            data
+            data,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
         );
         return res.data as Job;
     }
@@ -73,14 +91,25 @@ export const createJob = createAsyncThunk(
 export const deleteJob = createAsyncThunk(
     "jobs/deleteJob",
     async (id: string) => {
-        await axios.delete(`${import.meta.env.VITE_API_URL}/jobs/${id}`);
+        const token = localStorage.getItem("token");
+        await axios.delete(`${import.meta.env.VITE_API_URL}/jobs/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         return id;
     }
 );
 
 // Get User Jobs
 export const getUserJobs = createAsyncThunk("jobs/getUserJobs", async () => {
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/jobs/myJobs`);
+    const token = localStorage.getItem("token");
+
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/jobs/myJobs`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
     return res.data as Job[];
 });
 

@@ -45,6 +45,7 @@ router.post(
     requireRole("poster"),
     async (req: Request, res: Response) => {
         const userData = JobSchema.safeParse(req.body);
+        console.log("333333333333333333333333333333333333333");
         if (!userData.success) {
             return res.status(400).json({ message: "Invalid inputs" });
         }

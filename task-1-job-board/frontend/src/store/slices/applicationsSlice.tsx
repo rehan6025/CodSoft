@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 type Applications = {
-    id: string;
+    _id: string;
     job: string;
     applicant: string;
     resumeUrl: string;
@@ -89,7 +89,7 @@ export const updateApplicationStatus = createAsyncThunk(
         const res = await axios.patch(
             `${
                 import.meta.env.VITE_API_URL
-            }/applications/${applicationId}/status`,
+            }/me/applications/${applicationId}/status`,
             { status },
             {
                 headers: {
@@ -135,7 +135,7 @@ const applicationSlice = createSlice({
 
             .addCase(updateApplicationStatus.fulfilled, (state, action) => {
                 const index = state.jobApplications.findIndex(
-                    (app) => app.id === action.payload.id
+                    (app) => app._id === action.payload._id
                 );
                 if (index !== -1) {
                     state.jobApplications[index] = action.payload;

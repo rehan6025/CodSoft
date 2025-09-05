@@ -16,6 +16,7 @@ const SingleJob = () => {
     if (!jobid) {
         return <div>No job found</div>;
     }
+    const { user } = useAppSelector((state) => state.auth);
     const { currentJob, isLoading } = useAppSelector((state) => state.jobs);
     const { userApplications } = useAppSelector((state) => state.applications);
     const dispatch = useAppDispatch();
@@ -77,25 +78,28 @@ const SingleJob = () => {
                     {currentJob.title}
                 </h1>
             </div>
-            <div className="my-4 flex flex-col sm:flex-row items-center gap-2">
-                <input
-                    type="url"
-                    placeholder="Paste your resume URL (Google Drive, Dropbox, etc.)"
-                    value={resumeUrl}
-                    onChange={(e) => setResumeUrl(e.target.value)}
-                    className="border rounded px-3 py-2 w-full sm:w-2/3 border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                />
-                <button
-                    className="py-2 bg-blue-500 px-4 rounded-full text-blue-100 hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 duration-300"
-                    onClick={handleApply}
-                    disabled={
-                        !!applyStatus &&
-                        applyStatus !== "Failed to apply. Try again."
-                    }
-                >
-                    Apply
-                </button>
-            </div>
+            {user?.role === "seeker" && (
+                <div className="my-4 flex flex-col sm:flex-row items-center gap-2">
+                    <input
+                        type="url"
+                        placeholder="Paste your resume URL (Google Drive, Dropbox, etc.)"
+                        value={resumeUrl}
+                        onChange={(e) => setResumeUrl(e.target.value)}
+                        className="border rounded px-3 py-2 w-full sm:w-2/3 border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    />
+
+                    <button
+                        className="py-2 bg-blue-500 px-4 rounded-full text-blue-100 hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 duration-300"
+                        onClick={handleApply}
+                        disabled={
+                            !!applyStatus &&
+                            applyStatus !== "Failed to apply. Try again."
+                        }
+                    >
+                        Apply
+                    </button>
+                </div>
+            )}
             {applyStatus && (
                 <div className="text-sm text-green-600 mb-2">{applyStatus}</div>
             )}
