@@ -16,6 +16,7 @@ type FormData = {
 const PostJobPage = () => {
     const dispatch = useAppDispatch();
     const { user } = useAppSelector((state) => state.auth);
+    const [submitted, setSubmitted] = useState(false);
 
     const [formData, setFormData] = useState<FormData>({
         title: "",
@@ -60,8 +61,7 @@ const PostJobPage = () => {
             postedBy: user?._id as string,
         };
 
-        console.log("Final Payload:", payload);
-
+        setSubmitted(true);
         dispatch(createJob(payload));
     };
 
@@ -187,9 +187,14 @@ const PostJobPage = () => {
 
                 <button
                     type="submit"
-                    className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700"
+                    disabled={submitted}
+                    className={`w-full py-2 px-4  text-white font-semibold rounded-lg shadow-md  ${
+                        submitted == false
+                            ? "bg-blue-600 hover:bg-blue-700"
+                            : "bg-green-600"
+                    } `}
                 >
-                    Submit Job
+                    {submitted == false ? "Post Job" : "Posted!"}
                 </button>
             </form>
         </div>

@@ -1,4 +1,4 @@
-import { Palette } from "lucide-react";
+import { Briefcase, Palette } from "lucide-react";
 
 export function Footer() {
     return (
@@ -6,8 +6,8 @@ export function Footer() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col md:flex-row  items-center justify-between ">
                     <div className="flex items-center space-x-2 mb-3">
-                        <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg ">
-                            <Palette className="w-5 h-5 text-white" />
+                        <div className="w-8 h-8 flex items-center justify-center bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg ">
+                            <Briefcase className="w-5 h-5 text-white" />
                         </div>
                         <span className="text-white font-bold text-xl ">
                             JobBoard

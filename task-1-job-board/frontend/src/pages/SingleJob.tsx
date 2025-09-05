@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getJobById } from "../store/slices/jobsSlice";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { useEffect, useState } from "react";
@@ -16,6 +16,7 @@ const SingleJob = () => {
     if (!jobid) {
         return <div>No job found</div>;
     }
+    const navigate = useNavigate();
     const { user } = useAppSelector((state) => state.auth);
     const { currentJob, isLoading } = useAppSelector((state) => state.jobs);
     const { userApplications } = useAppSelector((state) => state.applications);

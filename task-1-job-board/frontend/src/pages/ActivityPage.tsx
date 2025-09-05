@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import {
     getUserApplications,
     getJobApplications,
     updateApplicationStatus,
 } from "../store/slices/applicationsSlice";
-import { getUserJobs, type Job } from "../store/slices/jobsSlice";
+import { deleteJob, getUserJobs } from "../store/slices/jobsSlice";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 import {
     Briefcase,
@@ -23,6 +23,10 @@ const STATUS_OPTIONS: { value: ApplicationStatus; label: string }[] = [
     { value: "accepted", label: "Accepted" },
     { value: "rejected", label: "Rejected" },
 ];
+
+function wait(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 const ActivityPage = () => {
     const dispatch = useAppDispatch();
@@ -59,11 +63,6 @@ const ActivityPage = () => {
     const isSeeker = user?.role === "seeker";
     const isPoster = user?.role === "poster";
 
-    const selectedJob: Job | undefined = useMemo(
-        () => userJobs.find((j) => j._id === expandedJobId),
-        [userJobs, expandedJobId]
-    );
-
     const handleToggleJob = (jobId: string) => {
         setExpandedJobId((prev) => (prev === jobId ? null : jobId));
     };
@@ -78,9 +77,12 @@ const ActivityPage = () => {
     const handleUpdateStatus = (applicationId: string) => {
         const status = pendingStatus[applicationId];
         if (!status) return;
-        console.log("send status 33333333333333333333");
-        console.log("application id: ", applicationId);
         dispatch(updateApplicationStatus({ applicationId, status }));
+    };
+
+    const handleDelete = (jobId: string) => {
+        dispatch(deleteJob(jobId));
+        wait(2000);
     };
 
     const getJobLabel = (job: unknown): string => {
@@ -180,7 +182,7 @@ const ActivityPage = () => {
                     {jobsLoading ? (
                         <LoadingSpinner size="lg" />
                     ) : userJobs.length === 0 ? (
-                        <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-lg border border-white/20 p-6">
+                        <div className="bg-white/70 backdrop-blur-md rounded-xl shadow-lg border border-gray-500 p-6">
                             <p className="text-gray-600">
                                 You haven't posted any jobs yet.
                             </p>
@@ -191,27 +193,37 @@ const ActivityPage = () => {
                                 key={job._id}
                                 className="bg-white/70 backdrop-blur-md rounded-xl shadow-lg border border-white/20"
                             >
-                                <button
-                                    className="w-full text-left p-6 flex items-center justify-between hover:bg-white/60 rounded-t-xl"
-                                    onClick={() => handleToggleJob(job._id)}
-                                >
-                                    <div>
-                                        <h2 className="text-lg font-semibold text-gray-900">
-                                            {job.title}
-                                        </h2>
-                                        <p className="text-gray-600 text-sm">
-                                            {job.company.name} • {job.location}
-                                        </p>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <Users className="w-5 h-5 text-gray-600" />
-                                        {expandedJobId === job._id ? (
-                                            <ChevronUp className="w-5 h-5 text-gray-600" />
-                                        ) : (
-                                            <ChevronDown className="w-5 h-5 text-gray-600" />
-                                        )}
-                                    </div>
-                                </button>
+                                <div className="relative">
+                                    <button
+                                        className="w-full text-left p-6 flex items-center justify-between hover:shadow-xl hover:border-transparent  hover:scale-[1.003]  transition-all rounded-xl"
+                                        onClick={() => handleToggleJob(job._id)}
+                                    >
+                                        <div>
+                                            <h2 className="text-lg font-semibold text-gray-900">
+                                                {job.title}
+                                            </h2>
+                                            <p className="text-gray-600 text-sm">
+                                                {job.company.name} •{" "}
+                                                {job.location}
+                                            </p>
+                                        </div>
+                                        <div className="flex items-center gap-2 mr-14">
+                                            <Users className="w-5 h-5 text-gray-600" />
+                                            {expandedJobId === job._id ? (
+                                                <ChevronUp className="w-5 h-5 text-gray-600" />
+                                            ) : (
+                                                <ChevronDown className="w-5 h-5 text-gray-600" />
+                                            )}
+                                        </div>
+                                    </button>
+                                    <button
+                                        className="absolute right-0 top-0 mr-4 mt-7 text-red-500  hover:bg-red-400 hover:text-white transition-all duration-300 border-black bg-red-100 rounded-lg px-1 py-2 hover:scale-[1.03]"
+                                        type="button"
+                                        onClick={() => handleDelete(job._id)}
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
 
                                 <div
                                     className={`

@@ -18,7 +18,7 @@ export const JobSchema = z.object({
     description: z.string().min(1),
     company: z.object({
         name: z.string().min(1),
-        website: z.string().url().optional(),
+        website: z.string().optional(),
     }),
     employmentType: z.enum([
         "full-time",
